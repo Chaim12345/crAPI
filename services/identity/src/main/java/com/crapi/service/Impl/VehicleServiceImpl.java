@@ -27,6 +27,7 @@ import com.crapi.service.VehicleService;
 import com.crapi.utils.GenerateVIN;
 import com.crapi.utils.MailBody;
 import com.crapi.utils.SMTPMailServer;
+import java.security.SecureRandom;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
@@ -91,7 +92,7 @@ public class VehicleServiceImpl implements VehicleService {
     List<VehicleModel> modelList = null;
     GenerateVIN generateVIN = new GenerateVIN();
     VehicleLocation vehicleLocations = null;
-    Random random = new Random();
+    Random random = new SecureRandom();
     modelList = vehicleModelRepository.findAll();
     vehicleLocations = getVehicleLocationList();
     if (modelList != null && vehicleLocations != null) {
@@ -148,7 +149,7 @@ public class VehicleServiceImpl implements VehicleService {
     VehicleDetails vehicleDetails = null;
     VehicleLocationResponse vehicleLocationForm = null;
     UserDetails userDetails = null;
-    Random random = new Random();
+    Random random = new SecureRandom();
     try {
       vehicleDetails = vehicleDetailsRepository.findByUuid(carId);
       if (vehicleDetails != null) {
@@ -230,7 +231,7 @@ public class VehicleServiceImpl implements VehicleService {
   /** @return list of vehicle location, fetching list of vehicle for random location se */
   @Transactional
   public VehicleLocation getVehicleLocationList() {
-    Random random = new Random();
+    Random random = new SecureRandom();
     List<VehicleLocation> vehicleLocation = null;
     vehicleLocation = vehicleLocationRepository.findAll();
     if (vehicleLocation != null && !vehicleLocation.isEmpty()) {
