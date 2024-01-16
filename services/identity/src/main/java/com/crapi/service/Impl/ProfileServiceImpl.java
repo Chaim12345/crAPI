@@ -28,6 +28,7 @@ import com.crapi.service.ProfileService;
 import com.crapi.service.UserService;
 import com.crapi.utils.BashCommand;
 import com.crapi.utils.ProfileValidator;
+import io.github.pixee.security.Filenames;
 import java.io.IOException;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
@@ -101,9 +102,9 @@ public class ProfileServiceImpl implements ProfileService {
       if (profileVideo != null) {
         profileVideo.setVideo(file.getBytes());
         profileVideo.setConversion_params(conversionParam);
-        profileVideo.setVideo_name(file.getOriginalFilename());
+        profileVideo.setVideo_name(Filenames.toSimpleFileName(file.getOriginalFilename()));
       } else {
-        profileVideo = new ProfileVideo(file.getOriginalFilename(), file.getBytes(), user);
+        profileVideo = new ProfileVideo(Filenames.toSimpleFileName(file.getOriginalFilename()), file.getBytes(), user);
       }
       profileVideoRepository.save(profileVideo);
       return profileVideo;
