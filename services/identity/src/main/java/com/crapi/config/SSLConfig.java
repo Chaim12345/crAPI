@@ -20,9 +20,9 @@ public class SSLConfig {
 
   public void setEnabled(String enabled) {
     if (enabled != null) {
-      if (enabled.equalsIgnoreCase("true")
-          || enabled.equalsIgnoreCase("yes")
-          || enabled.equalsIgnoreCase("1")) {
+      if ("true".equalsIgnoreCase(enabled)
+          || "yes".equalsIgnoreCase(enabled)
+          || "1".equalsIgnoreCase(enabled)) {
         this.enabled = true;
         System.out.println("TLS Enabled");
       } else {

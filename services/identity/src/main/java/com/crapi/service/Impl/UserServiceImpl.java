@@ -387,6 +387,6 @@ public class UserServiceImpl implements UserService {
   }
 
   public boolean isLog4jEnabled() {
-    return String.valueOf(System.getenv("ENABLE_LOG4J")).equals("true");
+    return "true".equals(String.valueOf(System.getenv("ENABLE_LOG4J")));
   }
 }
