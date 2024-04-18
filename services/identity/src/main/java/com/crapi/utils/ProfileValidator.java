@@ -14,6 +14,7 @@
 
 package com.crapi.utils;
 
+import io.github.pixee.security.Filenames;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,7 @@ public class ProfileValidator {
    * @return return file byte data after checking extension
    */
   public static byte[] validateFile(MultipartFile file) {
-    String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+    String fileName = StringUtils.cleanPath(Filenames.toSimpleFileName(file.getOriginalFilename()));
     try {
       // Check if the file's name contains invalid characters
       if (fileName.contains("..")) {
