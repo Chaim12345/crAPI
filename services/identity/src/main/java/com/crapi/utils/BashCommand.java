@@ -14,6 +14,7 @@
 
 package com.crapi.utils;
 
+import io.github.pixee.security.BoundedLineReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -50,7 +51,7 @@ public class BashCommand {
 
       String line = "";
       output = new StringBuilder();
-      while ((line = b.readLine()) != null) {
+      while ((line = BoundedLineReader.readLine(b, 5_000_000)) != null) {
         output.append(line + "\n");
       }
       return (output != null ? String.valueOf(output) : "command not found");
