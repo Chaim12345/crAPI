@@ -181,7 +181,9 @@ public class AuthController {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jwt);
   }
 
-  /** @return success or failure of password updation. */
+  /**
+   * @return success or failure of password updation.
+   */
   @PostMapping("/reset-test-users")
   public ResponseEntity<?> resetPassword() {
     ArrayList<SeedUser> userDetailList = new TestUsers().getUsers();

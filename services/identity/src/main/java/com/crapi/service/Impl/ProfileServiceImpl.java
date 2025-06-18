@@ -217,39 +217,39 @@ public class ProfileServiceImpl implements ProfileService {
         host,
         xForwardedHost,
         scheme);
-    try {
-      if (xForwardedHost == null) {
-        if (videoId != null && videoId > 0) {
-          Optional<ProfileVideo> optionalProfileVideo = profileVideoRepository.findById(videoId);
-          if (optionalProfileVideo.isPresent() && !enable_shell_injection) {
-            profileVideo = optionalProfileVideo.get();
-            if (ProfileValidator.checkContains(profileVideo.getConversion_params())) {
-              return new CRAPIResponse(UserMessage.CONVERSION_VIDEO_OK, 200);
-            } else if (profileVideo.getConversion_params().equalsIgnoreCase("-v codec h264")) {
-              return new CRAPIResponse(UserMessage.CONVERT_VIDEO_BASH_COMMAND_TRIGGERED, 200);
-            } else if (!profileVideo.getConversion_params().equalsIgnoreCase("-v codec h264")) {
-              if (ProfileValidator.checkSpecialCharacter(profileVideo.getConversion_params())) {
-                return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_ERROR, 500);
-              }
-              return new CRAPIResponse(UserMessage.YOU_WON_THE_GAME, 200);
+    // Removed try-catch block as IOException is no longer thrown directly by this code path
+    // and shell injection vulnerability is mitigated.
+    if (xForwardedHost == null) {
+      if (videoId != null && videoId > 0) {
+        Optional<ProfileVideo> optionalProfileVideo = profileVideoRepository.findById(videoId);
+        if (optionalProfileVideo.isPresent() && !enable_shell_injection) {
+          profileVideo = optionalProfileVideo.get();
+          if (ProfileValidator.checkContains(profileVideo.getConversion_params())) {
+            return new CRAPIResponse(UserMessage.CONVERSION_VIDEO_OK, 200);
+          } else if (profileVideo.getConversion_params().equalsIgnoreCase("-v codec h264")) {
+            return new CRAPIResponse(UserMessage.CONVERT_VIDEO_BASH_COMMAND_TRIGGERED, 200);
+          } else if (!profileVideo.getConversion_params().equalsIgnoreCase("-v codec h264")) {
+            if (ProfileValidator.checkSpecialCharacter(profileVideo.getConversion_params())) {
+              return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_ERROR, 500);
             }
-            return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_ERROR, 500);
-          } else if (optionalProfileVideo.isPresent()
-              && enable_shell_injection
-              && optionalProfileVideo.get().getConversion_params() != null) {
-            profileVideo = optionalProfileVideo.get();
-            return new CRAPIResponse(
-                bashCommand.executeBashCommand(profileVideo.getConversion_params()), 200);
+            return new CRAPIResponse(UserMessage.YOU_WON_THE_GAME, 200);
           }
           return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_ERROR, 500);
+        } else if (optionalProfileVideo.isPresent()
+            && enable_shell_injection
+            && optionalProfileVideo.get().getConversion_params() != null) {
+          profileVideo = optionalProfileVideo.get();
+          // Prevent shell injection by not executing custom parameters
+          logger.warn(
+              "Attempted to use custom conversion_params when enable_shell_injection is true. Blocking to prevent shell injection. Params: {}",
+              profileVideo.getConversion_params());
+          return new CRAPIResponse(UserMessage.CUSTOM_CONVERSION_NOT_ALLOWED, 403);
         }
-        return new CRAPIResponse(UserMessage.CONVERT_VIDEO_PARAM_IS_MISSING, 400);
-      } else {
-        return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_USE_ONLY, 403);
+        return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_ERROR, 500);
       }
-    } catch (IOException exception) {
-      logger.error("unable to convert video -> Message: %d ", exception);
-      throw new IOExceptionHandler(ProfileServiceImpl.class, UserMessage.ERROR);
+      return new CRAPIResponse(UserMessage.CONVERT_VIDEO_PARAM_IS_MISSING, 400);
+    } else {
+      return new CRAPIResponse(UserMessage.CONVERT_VIDEO_INTERNAL_USE_ONLY, 403);
     }
   }
 }

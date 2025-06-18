@@ -81,6 +81,8 @@ public class UserMessage {
   public static final String ERROR_EXECUTING_STRING = "Error occured while executing.";
   public static final String VIDEO_WAS_NOT_FOUND = "video wasn’t found";
   public static final String VIDEO_NOT_FOUND = "Video not found.";
+  public static final String CUSTOM_CONVERSION_NOT_ALLOWED =
+      "Custom video conversion parameters are not allowed for security reasons.";
   // public static final String
   // Exception Message
   public static final String INTERNAL_SERVER_ERROR_UNABLE_TO_CREATE_ACCOUNT =

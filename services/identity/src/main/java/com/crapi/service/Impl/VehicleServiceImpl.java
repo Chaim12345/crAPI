@@ -228,7 +228,9 @@ public class VehicleServiceImpl implements VehicleService {
     return new CRAPIResponse(UserMessage.VEHICLE_DETAILS_SENT_TO_EMAIL, 200);
   }
 
-  /** @return list of vehicle location, fetching list of vehicle for random location se */
+  /**
+   * @return list of vehicle location, fetching list of vehicle for random location se
+   */
   @Transactional
   public VehicleLocation getVehicleLocationList() {
     Random random = new SecureRandom();

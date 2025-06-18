@@ -17,14 +17,52 @@ application {
     mainClassName = "com.crapi.CRAPIBootApplication"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+val jvmArgumentsForLombok = listOf(
+    "--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+    "--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED" // New argument added here
+)
+
+tasks.withType<JavaCompile>().configureEach {
+    // Try to explicitly enable forking and set JVM args for the forked process
+    // This syntax might vary slightly based on exact Gradle version
+    // If 'options.fork = true' fails due to access issues,
+    // the worker should try 'options.setFork(true)' or simply proceed to set jvmArgs
+    // as some Gradle versions fork by default or when jvmArgs are specified for forkOptions.
+    try {
+        options.javaClass.getMethod("setFork", Boolean::class.javaPrimitiveType).invoke(options, true)
+    } catch (e: NoSuchMethodException) {
+        // Fallback or log: older Gradle might use a direct property or fork by default
+        // For now, we'll assume if setFork isn't there, jvmArgs might still apply if it forks
+    }
+
+    // Initialize jvmArgs if null, which can happen
+    if (options.forkOptions.jvmArgs == null) {
+        options.forkOptions.jvmArgs = mutableListOf<String>()
+    }
+    options.forkOptions.jvmArgs?.addAll(jvmArgumentsForLombok)
+}
 
 pluginManager.withPlugin("java") {
     apply(plugin = "com.diffplug.spotless")
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
-            removeUnusedImports()
-            googleJavaFormat("1.7")
+            // removeUnusedImports()
+            googleJavaFormat("1.17.0")
             indentWithSpaces(4)
             trimTrailingWhitespace()
             endWithNewline()
@@ -32,10 +70,10 @@ pluginManager.withPlugin("java") {
     }
 }
 dependencies {
-    val lombokVersion = "1.18.12"
+    val lombokVersion = "1.18.20"
     val mockito = "3.7.7"
     val springBootVersion = "2.6.1"
-    val log4jVersion = "2.14.0"
+    val log4jVersion = "2.17.1"
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")

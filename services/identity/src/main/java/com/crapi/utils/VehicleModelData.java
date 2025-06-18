@@ -22,7 +22,9 @@ import java.util.List;
 
 public class VehicleModelData {
 
-  /** @return List of hard coded Vehicle Model and Company for pre data setup. */
+  /**
+   * @return List of hard coded Vehicle Model and Company for pre data setup.
+   */
   public List<VehicleModel> getModelList() {
     List<VehicleModel> vehicleModelList = new ArrayList<>();
     vehicleModelList.add(

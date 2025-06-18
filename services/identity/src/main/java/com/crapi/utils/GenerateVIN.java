@@ -21,13 +21,17 @@ public class GenerateVIN {
   String vin = "";
   String pincode = "";
 
-  /** @return random generate pin code for add vehicle */
+  /**
+   * @return random generate pin code for add vehicle
+   */
   public String generatePincode() {
     pincode += getNum(3);
     return pincode;
   }
 
-  /** @return rendom generate VIN for vehicle */
+  /**
+   * @return rendom generate VIN for vehicle
+   */
   public String generateVIN() {
     vin += getNum(0) + getChar(3) + getNum(1) + getChar(3) + getNum(5);
     return vin;

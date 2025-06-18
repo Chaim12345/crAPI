@@ -20,7 +20,9 @@ import java.util.List;
 
 public class VehicleLocationData {
 
-  /** @return List of hard coded Vehicle Location for pre data setup */
+  /**
+   * @return List of hard coded Vehicle Location for pre data setup
+   */
   public List<VehicleLocation> getVehicleLocationData() {
     List<VehicleLocation> vehicleLocationData = new ArrayList<>();
     vehicleLocationData.add(new VehicleLocation("33.7967129", "-84.3909149"));
