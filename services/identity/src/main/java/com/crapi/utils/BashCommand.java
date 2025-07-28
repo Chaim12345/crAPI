@@ -14,6 +14,7 @@
 
 package com.crapi.utils;
 
+import io.github.pixee.security.SystemCommand;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +44,7 @@ public class BashCommand {
     // so having bash here makes it happy provided bash is installed and in path.
     String[] commands = {"bash", "-c", command};
     try {
-      Process p = r.exec(commands);
+      Process p = SystemCommand.runCommand(r, commands);
 
       p.waitFor();
       b = new BufferedReader(new InputStreamReader(p.getInputStream()));
