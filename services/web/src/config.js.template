@@ -2,5 +2,6 @@ export const crapienv = {
     JAVA_MICRO_SERVICES: "identity/",
     PYTHON_MICRO_SERVICES: "workshop/",
     GO_MICRO_SERVICES: "community/",
+    GOOGLE_CLIENT_ID: "YOUR_GOOGLE_CLIENT_ID",
 };
 

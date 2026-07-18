@@ -19,6 +19,7 @@ import { shopActionWatcher } from "./shopSaga";
 import { profileActionWatcher } from "./profileSaga";
 import { communityActionWatcher } from "./communitySaga";
 import { vehicleActionWatcher } from "./vehicleSaga";
+import { googleAuthActionWatcher } from "./googleAuthSaga";
 
 /**
  * saga to yield all others
@@ -30,5 +31,6 @@ export default function* rootSaga() {
     profileActionWatcher(),
     communityActionWatcher(),
     vehicleActionWatcher(),
+    googleAuthActionWatcher(),
   ]);
 }

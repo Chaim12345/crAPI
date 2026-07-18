@@ -24,6 +24,7 @@ export const APIService = {
 export const requestURLS = {
 
   LOGIN: "api/auth/login",
+  GOOGLE_AUTH: "api/auth/google",
   GET_USER: "api/v2/user/dashboard",
   SIGNUP: "api/auth/signup",
   RESET_PASSWORD: "api/v2/user/reset-password",

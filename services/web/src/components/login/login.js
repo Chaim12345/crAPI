@@ -27,7 +27,7 @@ import { EMAIL_REQUIRED } from "../../constants/messages";
  * login component for users
  */
 const Login = (props) => {
-  const { hasErrored, errorMessage, onFinish, history } = props;
+  const { hasErrored, errorMessage, onFinish, onGoogleLogin, history } = props;
 
   return (
     <div className="container">
@@ -83,6 +83,21 @@ const Login = (props) => {
             </button>
           </Form.Item>
         </Form>
+        <div className="google-divider">
+          <span>or</span>
+        </div>
+        <button
+          className="google-button"
+          onClick={onGoogleLogin}
+          type="button"
+        >
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google"
+            className="google-icon"
+          />
+          Sign in with Google
+        </button>
       </Card>
     </div>
   );
@@ -93,11 +108,13 @@ Login.propTypes = {
   hasErrored: PropTypes.bool,
   errorMessage: PropTypes.string,
   onFinish: PropTypes.func,
+  onGoogleLogin: PropTypes.func,
 };
 
 Login.defaultProps = {
   hasErrored: false,
   errorMessage: "",
+  onGoogleLogin: () => {},
 };
 
 export default Login;

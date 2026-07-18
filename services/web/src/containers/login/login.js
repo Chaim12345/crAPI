@@ -18,10 +18,12 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import Login from "../../components/login/login";
 import { logInUserAction } from "../../actions/userActions";
+import { logInWithGoogleAction } from "../../actions/googleAuthActions";
+import { crapienv } from "../../config";
 import responseTypes from "../../constants/responseTypes";
 
 const LoginContainer = (props) => {
-  const { history, logInUser } = props;
+  const { history, logInUser, logInWithGoogle } = props;
 
   const [hasErrored, setHasErrored] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -39,11 +41,32 @@ const LoginContainer = (props) => {
     logInUser({ ...values, callback });
   };
 
+  const handleGoogleLogin = () => {
+    if (!window.google || !window.google.accounts || !window.google.accounts.oauth2) {
+      setHasErrored(true);
+      setErrorMessage("Google Sign-In is not available");
+      return;
+    }
+
+    const tokenClient = window.google.accounts.oauth2.initTokenClient({
+      client_id: crapienv.GOOGLE_CLIENT_ID,
+      scope: "openid email profile",
+      callback: (response) => {
+        if (response && response.access_token) {
+          logInWithGoogle({ accessToken: response.access_token, callback });
+        }
+      },
+    });
+
+    tokenClient.requestAccessToken();
+  };
+
   return (
     <Login
       hasErrored={hasErrored}
       errorMessage={errorMessage}
       onFinish={onFinish}
+      onGoogleLogin={handleGoogleLogin}
       history={history}
     />
   );
@@ -51,10 +74,12 @@ const LoginContainer = (props) => {
 
 const mapDispatchToProps = {
   logInUser: logInUserAction,
+  logInWithGoogle: logInWithGoogleAction,
 };
 
 LoginContainer.propTypes = {
   logInUser: PropTypes.func,
+  logInWithGoogle: PropTypes.func,
   history: PropTypes.object,
 };
 

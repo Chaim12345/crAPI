@@ -47,6 +47,7 @@ services:
       - TLS_KEYSTORE_PASSWORD=passw0rd
       - TLS_KEY_PASSWORD=passw0rd
       - TLS_KEY_ALIAS=identity
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com}
     depends_on:
       postgresdb:
         condition: service_healthy

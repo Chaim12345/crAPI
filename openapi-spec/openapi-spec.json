@@ -133,6 +133,54 @@
       },
       "parameters" : [ ]
     },
+    "/identity/api/auth/google" : {
+      "post" : {
+        "operationId" : "google_auth",
+        "summary" : "Google OAuth 2.0 Authentication",
+        "description" : "Authenticate user using Google OAuth 2.0 access token",
+        "tags" : [ "Identity / Auth" ],
+        "security" : [ ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "type" : "object",
+                "required" : [ "access_token" ],
+                "properties" : {
+                  "access_token" : {
+                    "type" : "string",
+                    "example": "ya29.a0AfH6SMB..."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JwtResponse"
+                }
+              }
+            },
+            "description" : "Google authentication successful"
+          },
+          "401" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/JwtResponse"
+                }
+              }
+            },
+            "description" : "Google authentication failed"
+          }
+        }
+      },
+      "parameters" : [ ]
+    },
     "/identity/api/auth/forget-password" : {
       "post" : {
         "operationId" : "forgot_password",
